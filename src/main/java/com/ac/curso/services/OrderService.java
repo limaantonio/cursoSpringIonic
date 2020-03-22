@@ -35,6 +35,12 @@ public class OrderService {
 	@Autowired
 	private ProductService productService;
 	
+	@Autowired
+	private ClientService clientService;
+	
+	@Autowired
+	private EmailService emailService;
+	
 	
 	
 	public List<Order> findAll (){
@@ -50,6 +56,7 @@ public class OrderService {
 	public Order insert(Order obj) {
 		obj.setId(null);
 		obj.setInstante(new Date());
+		obj.setClient(clientService.findById(obj.getClient().getId()));
 		obj.getPayment().setEstado(StatusPayment.PENDETE);
 		obj.getPayment().setOrder(obj);
 		if(obj.getPayment() instanceof PaymentBoleto) {
@@ -58,14 +65,14 @@ public class OrderService {
 		}
 		obj = repository.save(obj);
 		paymentRepository.save(obj.getPayment());
-		for(ItemOrder ip : obj.getItens()) {
-			ip.setDesconto(0.0);
-			
-			
-			ip.setPrice(productService.findById(ip.getProduct().getId()).getPrice());
-			ip.setOrde(obj);
+		for(ItemOrder ip : obj.getItems()) {
+			ip.setDesconto(0.0);	
+			ip.setProduct(productService.findById(ip.getProduct().getId()));
+			ip.setPrice(ip.getProduct().getPrice());
+			ip.setOrder(obj);
 		}
-		itemOrderRepository.saveAll(obj.getItens());
+		itemOrderRepository.saveAll(obj.getItems());
+		emailService.sendOrderConfirmationEmail(obj);
 		return obj;
 	}
 	

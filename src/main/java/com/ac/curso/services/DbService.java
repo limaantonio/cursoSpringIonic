@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.ac.curso.domain.Address;
 import com.ac.curso.domain.Category;
@@ -29,6 +30,7 @@ import com.ac.curso.repositories.PaymentRespository;
 import com.ac.curso.repositories.ProductRespository;
 import com.ac.curso.repositories.StateRespository;
 
+@Service
 public class DbService {
 	
 	@Autowired
@@ -92,7 +94,7 @@ public class DbService {
 		cityRespository.saveAll(Arrays.asList(c1, c2, c3));
 		
 		
-		Client cli1 = new Client(null, "Maria Silva", "maria@gmail.com", "504545454", TipoCliente.PESSOAFISICA.getCod());
+		Client cli1 = new Client(null, "Maria Silva", "marquesquecia23@gmail.com", "504545454", TipoCliente.PESSOAFISICA.getCod());
 		
 		cli1.getTelefones().addAll(Arrays.asList("9494934", "498348394"));
 		
@@ -124,8 +126,8 @@ public class DbService {
 		ItemOrder ip1 = new ItemOrder(ped1, p1, 0.0, 1, 2000.0);
 		ItemOrder ip2 = new ItemOrder(ped1, p3, 0.0, 2, 80.0);
 		ItemOrder ip3 = new ItemOrder(ped2, p2, 100.0, 1, 800.0);
-		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
-		ped1.getItens().addAll(Arrays.asList(ip3));
+		ped1.getItems().addAll(Arrays.asList(ip1, ip2));
+		ped1.getItems().addAll(Arrays.asList(ip3));
 		
 		p1.getItens().addAll(Arrays.asList(ip1));
 		p2.getItens().addAll(Arrays.asList(ip3));
